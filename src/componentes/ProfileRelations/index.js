@@ -2,6 +2,8 @@ import styled from "styled-components";
 import Box from "../Box";
 
 export const ProfileRelationsBoxWrapper = styled(Box)`
+    overflow: scroll;
+    box-sizing: content-box;
     ul {
         display: grid;
         grid-gap: 8px;
