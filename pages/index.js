@@ -101,11 +101,11 @@ export default function Home() {
         `
       })
     })
-    .then((response) => response.json())
-    .then((response) => {
-      const comunidadesRecebidas = response.data.allComunnities
+      .then((response) => response.json())
+      .then((response) => {
+        const comunidadesRecebidas = response.data.allComunnities
         setComunidades(comunidadesRecebidas)
-    });
+      });
 
     fetch('https://graphql.datocms.com/', {
       method: 'POST',
@@ -125,11 +125,11 @@ export default function Home() {
         `
       })
     })
-    .then((response) => response.json())
-    .then((response) => {
-      const comentariosRecebidos = response.data.allComments
-      setComentarios(comentariosRecebidos)
-    })
+      .then((response) => response.json())
+      .then((response) => {
+        const comentariosRecebidos = response.data.allComments
+        setComentarios(comentariosRecebidos)
+      })
 
 
   }, []);
@@ -215,14 +215,14 @@ export default function Home() {
             <h2 className="subTitle">Comentários ({comentarios.length})</h2>
             {comentarios.map((comentarioAtual) => {
               return (
-                <div style={{padding: ".25rem", marginBottom: "1rem", border: "1px solid #AAAAAA", borderRadius: "30px", display: "flex", alignItems: "center"}}>
-                  <img style={{marginRight: ".5rem", borderRadius: "30px", width: "7%", display:"inline-block"}} src={`https://github.com/${comentarioAtual.user}.png`} />
-                  <ul style={{listStyle: "none"}}>
+                <div style={{ padding: ".25rem", marginBottom: "1rem", border: "1px solid #AAAAAA", borderRadius: "30px", display: "flex", alignItems: "center" }}>
+                  <img style={{ marginRight: ".5rem", borderRadius: "30px", width: "7%", display: "inline-block" }} src={`https://github.com/${comentarioAtual.user}.png`} />
+                  <ul style={{ listStyle: "none" }}>
                     <li>
                       <div>
                         <h4>{comentarioAtual.user}</h4>
                         <span>{comentarioAtual.comment}</span>
-                      </div> 
+                      </div>
                     </li>
                   </ul>
                 </div>
