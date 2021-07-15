@@ -52,7 +52,7 @@ function ProfileRelationsBox(props) {
 
 export default function Home() {
 
-  const usuario = 'omariosouto';
+  const usuario = 'marshmll';
 
   const [comunidades, setComunidades] = React.useState([]);
 
@@ -71,6 +71,7 @@ export default function Home() {
   ]
 
   const [seguidores, setSeguidores] = React.useState([]);
+  const [comentarios, setComentarios] = React.useState([]);
 
   React.useEffect(() => {
 
@@ -100,11 +101,36 @@ export default function Home() {
         `
       })
     })
-      .then((response) => response.json())
-      .then((response) => {
-        const comunidadesRecebidas = response.data.allComunnities
+    .then((response) => response.json())
+    .then((response) => {
+      const comunidadesRecebidas = response.data.allComunnities
         setComunidades(comunidadesRecebidas)
+    });
+
+    fetch('https://graphql.datocms.com/', {
+      method: 'POST',
+      headers: {
+        'Authorization': '5f8338367a600ee4fc22580ff27938',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        'query': `
+          query {
+            allComments {
+              comment
+              user
+            }
+          }
+        `
       })
+    })
+    .then((response) => response.json())
+    .then((response) => {
+      const comentariosRecebidos = response.data.allComments
+      setComentarios(comentariosRecebidos)
+    })
+
 
   }, []);
 
@@ -185,6 +211,62 @@ export default function Home() {
               </button>
             </form>
           </Box>
+          <Box>
+            <h2 className="subTitle">Comentários ({comentarios.length})</h2>
+            {comentarios.map((comentarioAtual) => {
+              return (
+                <div style={{padding: ".25rem", marginBottom: "1rem", border: "1px solid #AAAAAA", borderRadius: "30px", display: "flex", alignItems: "center"}}>
+                  <img style={{marginRight: ".5rem", borderRadius: "30px", width: "7%", display:"inline-block"}} src={`https://github.com/${comentarioAtual.user}.png`} />
+                  <ul style={{listStyle: "none"}}>
+                    <li>
+                      <div>
+                        <h4>{comentarioAtual.user}</h4>
+                        <span>{comentarioAtual.comment}</span>
+                      </div> 
+                    </li>
+                  </ul>
+                </div>
+              )
+            })}
+            <form onSubmit={(event) => {
+
+              event.preventDefault();
+
+              const dadosDoForm = new FormData(event.target);
+
+              const comentario = {
+                comment: dadosDoForm.get("comment"),
+                user: usuario
+              }
+
+              document.querySelector('#comment-input').value = '';
+
+              fetch('/api/comentarios', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(comentario),
+              }).then(async (response) => {
+                const dados = await response.json();
+                console.log(dados.registroCriado);
+                const comentario = dados.registroCriado;
+                const comentariosAtualizados = [comentario, ...comentarios];
+                setComentarios(comentariosAtualizados);
+              })
+
+            }}>
+              <div>
+                <input
+                  placeholder="Escreva seu comentário"
+                  name="comment"
+                  id="comment-input"
+                  aria-label="Escreva seu comentário"
+                />
+              </div>
+              <button>Comentar</button>
+            </form>
+          </Box>
         </div>
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
           <ProfileRelationsBox title="Pessoas da Comunidade" items={pessoasFavoritas} />
@@ -197,7 +279,7 @@ export default function Home() {
                 comunidades.map((itemAtual) => {
                   return (
                     <li key={itemAtual.id}>
-                      <a href={`/comunnities/${itemAtual.id}`}>
+                      <a href={itemAtual.link}>
                         <img src={itemAtual.imageUrl} />
                         <span>{itemAtual.title}</span>
                       </a>
