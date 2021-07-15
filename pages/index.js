@@ -236,7 +236,7 @@ export default function Home() {
 
               const comentario = {
                 comment: dadosDoForm.get("comment"),
-                user: usuario
+                user: dadosDoForm.get("user")
               }
 
               document.querySelector('#comment-input').value = '';
@@ -262,6 +262,14 @@ export default function Home() {
                   name="comment"
                   id="comment-input"
                   aria-label="Escreva seu comentário"
+                />
+              </div>
+              <div>
+                <input
+                  placeholder="Escreva seu usuário"
+                  name="user"
+                  id="user-input"
+                  aria-label="Escreva seu usuário"
                 />
               </div>
               <button>Comentar</button>
