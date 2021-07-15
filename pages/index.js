@@ -262,14 +262,16 @@ export default function Home() {
                   name="comment"
                   id="comment-input"
                   aria-label="Escreva seu comentário"
+                  required
                 />
               </div>
               <div>
                 <input
-                  placeholder="Escreva seu usuário"
+                  placeholder="Informe seu usuário"
                   name="user"
                   id="user-input"
-                  aria-label="Escreva seu usuário"
+                  aria-label="Informe seu usuário"
+                  required
                 />
               </div>
               <button>Comentar</button>
