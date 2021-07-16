@@ -3,6 +3,8 @@ import MainGrid from '../src/componentes/MainGrid';
 import Box from '../src/componentes/Box';
 import { AlurakutMenu, AlurakutProfileSidebarMenuDefault, OrkutNostalgicIconSet } from '../src/lib/AluraKutCommons'
 import { ProfileRelationsBoxWrapper } from '../src/componentes/ProfileRelations';
+import nookies from 'nookies';
+import jwt from 'jsonwebtoken';
 
 function ProfileSideBar(propriedades) {
 
@@ -50,9 +52,9 @@ function ProfileRelationsBox(props) {
   )
 }
 
-export default function Home() {
+export default function Home(props) {
 
-  const usuario = 'marshmll';
+  const usuario = props.githubUser;
 
   const [comunidades, setComunidades] = React.useState([]);
 
@@ -190,6 +192,7 @@ export default function Home() {
                   name="title"
                   aria-label="Qual vai ser o nome da sua comunidade?"
                   type="text"
+                  required
                 />
               </div>
               <div>
@@ -197,6 +200,7 @@ export default function Home() {
                   placeholder="Coloque uma URL para usarmos de capa"
                   name="image"
                   aria-label="Coloque uma URL para usarmos de capa"
+                  required
                 />
               </div>
               <div>
@@ -204,6 +208,7 @@ export default function Home() {
                   placeholder="Insira o link da comunidade"
                   name="link"
                   aria-label="Insira o link da comunidade"
+                  required
                 />
               </div>
               <button>
@@ -236,7 +241,7 @@ export default function Home() {
 
               const comentario = {
                 comment: dadosDoForm.get("comment"),
-                user: dadosDoForm.get("user")
+                user: usuario
               }
 
               document.querySelector('#comment-input').value = '';
@@ -262,15 +267,6 @@ export default function Home() {
                   name="comment"
                   id="comment-input"
                   aria-label="Escreva seu comentário"
-                  required
-                />
-              </div>
-              <div>
-                <input
-                  placeholder="Informe seu usuário"
-                  name="user"
-                  id="user-input"
-                  aria-label="Informe seu usuário"
                   required
                 />
               </div>
@@ -323,4 +319,35 @@ export default function Home() {
       </MainGrid>
     </>
   )
+}
+
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
+  const token = cookies.USER_TOKEN;
+
+  const {isAuthenticated} = await fetch('https://alurakut.vercel.app/api/auth', {
+    headers: {
+      Authorization: token
+    }
+  })
+  .then((resposta) => resposta.json());
+
+  console.log("autenticação da api: ", isAuthenticated)
+
+  if(!isAuthenticated) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      }
+    }
+  }
+
+  const { githubUser } = jwt.decode(token);
+
+  return {
+    props: {
+      githubUser
+    },
+  }
 }
