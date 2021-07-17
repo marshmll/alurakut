@@ -8,7 +8,7 @@ Durante as 5 aulas, foram trabalhados:
 * React, State, Forms;
 * Hooks, useEffect e HTTP;
 * Requisições com GraphQL, BFF e AJAX;
-* Sistema de login com tokens e consumo de API e validação de usuário.
+* Sistema de login com tokens, consumo de API, validação de usuário e manupulação de Cookies.
 
 Você pode acessar a última versão de deploy na Vercel clicando [aqui](https://alurakut-silk.vercel.app/login).
 
