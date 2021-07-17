@@ -6,6 +6,9 @@ export default function LoginScreen() {
 
 	const router = useRouter();
 
+	const [message, setMessage] = React.useState("");
+
+
 	const [githubUser, setGithubUser] = React.useState("");
 
 	return (
@@ -46,12 +49,16 @@ export default function LoginScreen() {
 							});
 
 							router.push("/");
+							setTimeout(() => {
+								setMessage("Usuário inválido")
+							}, 3000); 
 
 						})
 					}}>
 						<p>
 							Acesse agora mesmo com seu usuário do <strong>GitHub</strong>!
 						</p>
+						<div style={{borderBottom: "1px solid red", padding: ".05rem"}}><h2 style={{fontSize: "15px", color: "red"}}>{message}</h2></div>
 						<input 
 						placeholder="Usuário"
 						value={githubUser}
