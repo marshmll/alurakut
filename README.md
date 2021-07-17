@@ -10,7 +10,7 @@ Durante as 5 aulas, foram trabalhados:
 * Requisições com GraphQL, BFF e AJAX;
 * Sistema de login com tokens e consumo de API e validação de usuário.
 
-Você pode acessar a última versão de deploy na Vercel clicando [aqui](alurakut-silk.vercel.app/login).
+Você pode acessar a última versão de deploy na Vercel clicando [aqui](https://alurakut-silk.vercel.app/login).
 
 ## Como rodar o projeto em sua máquina
 Caso queira rodar o projeto em sua máquina e fazer suas alterações, clone ou baixe o projeto e execute o comando `npm run dev` ou `yarn dev` dentro da pasta do projeto. Acesse-o pelo link `https://localhost:3000`.
