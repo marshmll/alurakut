@@ -284,9 +284,10 @@ export default function Home(props) {
             <ul>
               {
                 comunidades.map((itemAtual) => {
+                  console.log(itemAtual)
                   return (
                     <li key={itemAtual.id}>
-                      <a href={itemAtual.link}>
+                      <a href={itemAtual.communityLink}>
                         <img src={itemAtual.imageUrl} />
                         <span>{itemAtual.title}</span>
                       </a>
@@ -323,35 +324,58 @@ export default function Home(props) {
 }
 
 export async function getServerSideProps(context) {
+
   const cookies = nookies.get(context);
-  const token = cookies.USER_TOKEN;
 
-  const {isAuthenticated} = await fetch('https://alurakut.vercel.app/api/auth', {
-    headers: {
-      Authorization: token
+  const token = cookies.USER_TOKEN || false;
+
+  if(!token) return {
+
+    redirect: {
+
+      destination: '/login',
+      permanent: false,
+
     }
+
+  }
+
+  const { isAuthenticated } = await fetch('https://alurakut.vercel.app/api/auth', {
+
+    headers: {
+
+      Authorization: token
+
+    }
+
   })
-  .then((resposta) => resposta.json());
-
+    .then((resposta) => resposta.json());
+    
   const { githubUser } = jwt.decode(token);
-  const usuarioValido = await fetch(`https://api.github.com/users/${githubUser}`).then(async (resposta) => resposta.ok);
-	console.log(usuarioValido)
 
-  console.log("autenticação da api: ", isAuthenticated)
+  const usuarioValido = await fetch(`https://api.github.com/users/${githubUser}`)
+    .then(async (resposta) => resposta.ok);
 
-  if(!isAuthenticated || !usuarioValido) {
+  if (!isAuthenticated || !usuarioValido) {
+
     return {
+
       redirect: {
+
         destination: '/login',
         permanent: false,
+
       }
     }
   }
 
 
   return {
+
     props: {
+
       githubUser
+      
     },
   }
 }
