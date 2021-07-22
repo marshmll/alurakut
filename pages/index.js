@@ -219,7 +219,6 @@ export default function Home(props) {
           <Box>
             <h2 className="subTitle">Comentários ({comentarios.length})</h2>
             {comentarios.map((comentarioAtual) => {
-              console.log(comentarioAtual.user)
               return (
                 <div style={{ padding: ".25rem", marginBottom: "1rem", border: "1px solid #AAAAAA", borderRadius: "30px", display: "flex", alignItems: "center" }}>
                   <img style={{ marginRight: ".5rem", borderRadius: "30px", width: "7%", display: "inline-block" }} src={`https://github.com/${comentarioAtual.user}.png`} />
@@ -284,7 +283,6 @@ export default function Home(props) {
             <ul>
               {
                 comunidades.map((itemAtual) => {
-                  console.log(itemAtual)
                   return (
                     <li key={itemAtual.id}>
                       <a href={itemAtual.communityLink}>
