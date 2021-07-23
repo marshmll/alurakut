@@ -109,30 +109,31 @@ export default function Home(props) {
         setComunidades(comunidadesRecebidas)
       });
 
-    fetch('https://graphql.datocms.com/', {
-      method: 'POST',
-      headers: {
-        'Authorization': '5f8338367a600ee4fc22580ff27938',
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        'query': `
-          query {
-            allComments {
-              comment
-              user
-            }
-          }
-        `
+    setInterval(() => {
+      fetch('https://graphql.datocms.com/', {
+        method: 'POST',
+        headers: {
+          'Authorization': '5f8338367a600ee4fc22580ff27938',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          'query': `
+              query {
+                allComments {
+                  comment
+                  user
+                }
+              }
+            `
+        })
       })
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        const comentariosRecebidos = response.data.allComments
-        setComentarios(comentariosRecebidos)
-      })
-
+        .then((response) => response.json())
+        .then((response) => {
+          const comentariosRecebidos = response.data.allComments
+          setComentarios(comentariosRecebidos)
+        })
+    }, 2000);
 
   }, []);
 
@@ -217,7 +218,7 @@ export default function Home(props) {
             </form>
           </Box>
           <Box>
-            <h2 className="subTitle">Comentários ({comentarios.length})</h2>
+            <h2 className="subTitle">Comentários ({comentarios.length || "Carregando..."})</h2>
             {comentarios.map((comentarioAtual) => {
               return (
                 <div style={{ padding: ".25rem", marginBottom: "1rem", border: "1px solid #AAAAAA", borderRadius: "30px", display: "flex", alignItems: "center" }}>
@@ -327,7 +328,7 @@ export async function getServerSideProps(context) {
 
   const token = cookies.USER_TOKEN || false;
 
-  if(!token) return {
+  if (!token) return {
 
     redirect: {
 
@@ -348,7 +349,7 @@ export async function getServerSideProps(context) {
 
   })
     .then((resposta) => resposta.json());
-    
+
   const { githubUser } = jwt.decode(token);
 
   const usuarioValido = await fetch(`https://api.github.com/users/${githubUser}`)
@@ -373,7 +374,7 @@ export async function getServerSideProps(context) {
     props: {
 
       githubUser
-      
+
     },
   }
 }
